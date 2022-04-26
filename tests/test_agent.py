@@ -1,7 +1,7 @@
-"""Tests for the `cli` module."""
+"""Unit tests for agent"""
 
 import pytest
 
 
 def test_agent():
-    assert True is True
+    pass
