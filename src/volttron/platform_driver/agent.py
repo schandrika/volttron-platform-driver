@@ -48,18 +48,22 @@ from collections import defaultdict
 
 from volttron.client.vip.agent import Agent
 from volttron.client.vip.agent.subsystems.rpc import RPC
+from volttron.client.known_identities import PLATFORM_DRIVER
+from volttron.utils import (
+ get_aware_utc_now, parse_timestamp_string,
+    format_timestamp, load_config, setup_logging, vip_main
+)
+from volttron.utils.jsonapi import (dumps, loads)
 
-from volttron.platform.agent import utils
-from volttron.platform.agent import math_utils
-from volttron.platform.agent.known_identities import PLATFORM_DRIVER
-from volttron.platform import jsonapi
-
+from .math_utils import (
+    mean, stdev
+)
 from .driver import DriverAgent
 from .interfaces import DriverInterfaceError
-from .driver_locks import configure_socket_lock, configure_publish_lock
+from .driver_locks import (configure_socket_lock, configure_publish_lock)
 
 
-utils.setup_logging()
+setup_logging()
 _log = logging.getLogger(__name__)
 __version__ = '4.0'
 
@@ -71,7 +75,7 @@ class OverrideError(DriverInterfaceError):
 
 def platform_driver_agent(config_path, **kwargs):
 
-    config = utils.load_config(config_path)
+    config = load_config(config_path)
 
     def get_config(name, default=None):
         try:
@@ -272,18 +276,18 @@ class PlatformDriverAgent(Agent):
         if self._override_patterns is None:
             try:
                 values = self.vip.config.get("override_patterns")
-                values = jsonapi.loads(values)
+                values = loads(values)
 
                 if isinstance(values, dict):
                     self._override_patterns = set()
                     for pattern, end_time in values.items():
                         # check the end_time
-                        now = utils.get_aware_utc_now()
+                        now = get_aware_utc_now()
                         # If end time is indefinite, set override with indefinite duration
                         if end_time == "0.0":
                             self._set_override_on(pattern, 0.0, from_config_store=True)
                         else:
-                            end_time = utils.parse_timestamp_string(end_time)
+                            end_time = parse_timestamp_string(end_time)
                             # If end time > current time, set override with new duration
                             if end_time > now:
                                 delta = end_time - now
@@ -433,10 +437,10 @@ class PlatformDriverAgent(Agent):
             
             if self.test_iterations >= self.scalability_test_iterations:
                 # Test is now over. Button it up and shutdown.
-                mean = math_utils.mean(self.test_results) 
-                stdev = math_utils.stdev(self.test_results) 
-                _log.info("Mean total publish time: "+str(mean))
-                _log.info("Std dev publish time: "+str(stdev))
+                mean_t = mean(self.test_results) 
+                stdev_t = stdev(self.test_results) 
+                _log.info("Mean total publish time: "+str(mean_t))
+                _log.info("Std dev publish time: "+str(stdev_t))
                 sys.exit(0)
 
     @RPC.export
@@ -609,9 +613,9 @@ class PlatformDriverAgent(Agent):
                     patterns[pat] = str(0.0)
                 else:
                     evt, end_time = self._override_interval_events[pat]
-                    patterns[pat] = utils.format_timestamp(end_time)
+                    patterns[pat] = format_timestamp(end_time)
 
-            self.vip.config.set("override_patterns", jsonapi.dumps(patterns))
+            self.vip.config.set("override_patterns", dumps(patterns))
 
     @RPC.export
     def set_override_off(self, pattern):
@@ -680,9 +684,9 @@ class PlatformDriverAgent(Agent):
                     patterns[pat] = str(0.0)
                 else:
                     evt, end_time = self._override_interval_events[pat]
-                    patterns[pat] = utils.format_timestamp(end_time)
+                    patterns[pat] = format_timestamp(end_time)
 
-            self.vip.config.set("override_patterns", jsonapi.dumps(patterns))
+            self.vip.config.set("override_patterns", dumps(patterns))
         else:
             _log.error("Override Pattern did not match!")
             raise OverrideError(
@@ -710,7 +714,7 @@ class PlatformDriverAgent(Agent):
             self._override_interval_events[pattern] = None
             return True
         else:
-            override_start = utils.get_aware_utc_now()
+            override_start = get_aware_utc_now()
             override_end = override_start + timedelta(seconds=interval)
             if pattern in self._override_interval_events:
                 evt = self._override_interval_events[pattern]
@@ -784,7 +788,7 @@ class PlatformDriverAgent(Agent):
 
 def main(argv=sys.argv):
     """Main method called to start the agent."""
-    utils.vip_main(platform_driver_agent, identity=PLATFORM_DRIVER,
+    vip_main(platform_driver_agent, identity=PLATFORM_DRIVER,
                    version=__version__)
 
 
