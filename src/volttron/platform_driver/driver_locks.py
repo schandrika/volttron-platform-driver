@@ -36,10 +36,12 @@
 # under Contract DE-AC05-76RL01830
 # }}}
 
-from gevent.lock import BoundedSemaphore, DummySemaphore
 from contextlib import contextmanager
 
+from gevent.lock import BoundedSemaphore, DummySemaphore
+
 _socket_lock = None
+
 
 def configure_socket_lock(max_connections=0):
     global _socket_lock
@@ -50,18 +52,21 @@ def configure_socket_lock(max_connections=0):
     else:
         _socket_lock = BoundedSemaphore(max_connections)
 
-@contextmanager        
+
+@contextmanager
 def socket_lock():
     global _socket_lock
     if _socket_lock is None:
         raise RuntimeError("socket_lock not configured!")
     _socket_lock.acquire()
-    try:        
-        yield 
+    try:
+        yield
     finally:
         _socket_lock.release()
-        
+
+
 _publish_lock = None
+
 
 def configure_publish_lock(max_connections=0):
     global _publish_lock
@@ -72,13 +77,14 @@ def configure_publish_lock(max_connections=0):
     else:
         _publish_lock = BoundedSemaphore(max_connections)
 
-@contextmanager        
+
+@contextmanager
 def publish_lock():
     global _publish_lock
     if _publish_lock is None:
         raise RuntimeError("socket_lock not configured!")
     _publish_lock.acquire()
-    try:        
-        yield 
+    try:
+        yield
     finally:
         _publish_lock.release()

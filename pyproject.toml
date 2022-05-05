@@ -6,6 +6,10 @@ httpx = ">=0.16.1"
 jinja2-cli = ">=0.7.0"
 toml = ">=0.10.2"
 
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+
 [tool.poetry]
 name = "volttron-platform-driver"
 version = "0.1.0"
@@ -19,8 +23,6 @@ keywords = []
 packages = [ { include = "volttron", from = "src" } ]
 
 [tool.poetry.dependencies]
-# TODO: uncomment when volttron 0.1.0 is available
-# volttron = "^0.1.0"
 python = ">=3.8,<4.0"
 volttron = {path = "../volttron-core", develop = true}
 
