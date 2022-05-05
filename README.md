@@ -96,19 +96,6 @@ is an example:
 
 ```git commit -m "Some message" --no-verify```
 
-# Development
-
-If you want to use a local version of [volttron-core](https://github.com/VOLTTRON/volttron-core) instead of installing it from PyPi, modify the '[tool.poetry.dependencies]' section
-of pyproject.toml to use a local version. To do this, you can run the following command:
-
-```
-# form of the command
-# poetry add <path to my local version of volttron-core> --editable
-
-# example; note that the 'volttron-core' is located one directory up from the current directory
-poetry add ../volttron-core/ --editable
-```
-
 # Documentation
 
 To build the docs, navigate to the 'docs' directory and build the documentation:

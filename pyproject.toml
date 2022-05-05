@@ -6,10 +6,6 @@ httpx = ">=0.16.1"
 jinja2-cli = ">=0.7.0"
 toml = ">=0.10.2"
 
-[tool.isort]
-multi_line_output = 3
-include_trailing_comma = true
-
 [tool.poetry]
 name = "volttron-platform-driver"
 version = "0.1.0"
@@ -40,7 +36,7 @@ Sphinx = "^4.5.0"
 sphinx-rtd-theme = "^1.0.0"
 
 [tool.poetry.scripts]
-volttron-platform-driver = "volttron.platform_driver.agent:main"
+platformdriveragent = "platform_driver_agent.agent:main"
 
 [tool.yapf]
 based_on_style = "pep8"

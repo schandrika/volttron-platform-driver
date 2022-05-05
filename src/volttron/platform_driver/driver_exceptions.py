@@ -36,10 +36,8 @@
 # under Contract DE-AC05-76RL01830
 # }}}
 
-
 class DriverError(Exception):
     pass
-
 
 class DriverConfigError(DriverError):
     pass
