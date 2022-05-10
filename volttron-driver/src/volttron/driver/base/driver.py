@@ -42,20 +42,20 @@ import random
 import traceback
 
 import gevent
-from volttron.platform.agent import utils
-from volttron.platform.messaging import headers as headers_mod
-from volttron.platform.messaging.topics import (
+from volttron.client.messaging import headers as headers_mod
+from volttron.client.messaging.topics import (
     DEVICES_PATH,
     DEVICES_VALUE,
     DRIVER_TOPIC_ALL,
     DRIVER_TOPIC_BASE,
 )
-from volttron.platform.vip.agent import BasicAgent, Core
-from volttron.platform.vip.agent.errors import Again, VIPError
+from volttron.client.vip.agent import BasicAgent, Core
+from volttron.client.vip.agent.errors import Again, VIPError
+from volttron.utils import format_timestamp, get_aware_utc_now, setup_logging
 
 from .driver_locks import publish_lock
 
-utils.setup_logging()
+setup_logging()
 _log = logging.getLogger(__name__)
 
 
@@ -139,7 +139,7 @@ class DriverAgent(BasicAgent):
 
         self.periodic_read_event.cancel()
 
-        next_periodic_read = self.find_starting_datetime(utils.get_aware_utc_now())
+        next_periodic_read = self.find_starting_datetime(get_aware_utc_now())
 
         self.periodic_read_event = self.core.schedule(next_periodic_read, self.periodic_read,
                                                       next_periodic_read)
@@ -178,7 +178,7 @@ class DriverAgent(BasicAgent):
         # interval = self.config.get("interval", 60)
         # self.core.periodic(interval, self.periodic_read, wait=None)
 
-        next_periodic_read = self.find_starting_datetime(utils.get_aware_utc_now())
+        next_periodic_read = self.find_starting_datetime(get_aware_utc_now())
 
         self.periodic_read_event = self.core.schedule(next_periodic_read, self.periodic_read,
                                                       next_periodic_read)
@@ -240,7 +240,7 @@ class DriverAgent(BasicAgent):
         # If we don't make this check a resumed VM will publish one event
         # per minute of
         # time the VM was suspended for.
-        test_now = utils.get_aware_utc_now()
+        test_now = get_aware_utc_now()
         if test_now - next_scrape_time > datetime.timedelta(seconds=self.interval):
             next_scrape_time = self.find_starting_datetime(test_now)
 
@@ -268,10 +268,9 @@ class DriverAgent(BasicAgent):
         if not results:
             return
 
-        utcnow = utils.get_aware_utc_now()
-        utcnow_string = utils.format_timestamp(utcnow)
-        sync_timestamp = utils.format_timestamp(now -
-                                                datetime.timedelta(seconds=self.time_slot_offset))
+        utcnow = get_aware_utc_now()
+        utcnow_string = format_timestamp(utcnow)
+        sync_timestamp = format_timestamp(now - datetime.timedelta(seconds=self.time_slot_offset))
 
         headers = {
             headers_mod.DATE: utcnow_string,
@@ -368,8 +367,8 @@ class DriverAgent(BasicAgent):
         :param point_name: point which sent COV notifications
         :param point_values: COV point values
         """
-        utcnow = utils.get_aware_utc_now()
-        utcnow_string = utils.format_timestamp(utcnow)
+        utcnow = get_aware_utc_now()
+        utcnow_string = format_timestamp(utcnow)
         headers = {
             headers_mod.DATE: utcnow_string,
             headers_mod.TIMESTAMP: utcnow_string,
