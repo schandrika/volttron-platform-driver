@@ -14,7 +14,7 @@ include_trailing_comma = true
 name = "volttron-driver"
 version = "0.1.0"
 description = "The Driver agent is a custom agent used by the Platform Driver Agent."
-authors = ["Mark Bonicillo <mark.bonicillo@pnnl.gov>"]
+authors = ["VOLTTRON <volttron@pnnl.gov>"]
 license = "Apache License 2.0"
 readme = "README.md"
 repository = "https://github.com/VOLTTRON/platform-driver-agent"
@@ -38,9 +38,6 @@ mypy = "^0.942"
 coverage = "^6.3.2"
 Sphinx = "^4.5.0"
 sphinx-rtd-theme = "^1.0.0"
-
-[tool.poetry.scripts]
-volttron-platform-driver = "volttron.platform_driver.agent:main"
 
 [tool.yapf]
 based_on_style = "pep8"
