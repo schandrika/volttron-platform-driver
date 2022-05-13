@@ -24,8 +24,9 @@ packages = [ { include = "platform_driver", from = "src" } ]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
-volttron = {path = "../../volttron-core", develop = true}
-volttron-driver = {path = "../volttron-driver", develop = true}
+volttron = {url = "https://github.com/VOLTTRON/volttron-core/releases/download/v10.0.1-alpha.9/volttron-10.0.1a9-py3-none-any.whl"}
+volttron-driver = {path = "../volttron-driver", develop = false}
+
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
@@ -40,6 +41,9 @@ coverage = "^6.3.2"
 Sphinx = "^4.5.0"
 sphinx-rtd-theme = "^1.0.0"
 
+[tool.poetry.scripts]
+volttron-platform-driver = "platform_driver.agent:main"
+
 [tool.yapf]
 based_on_style = "pep8"
 spaces_before_comment = 4
@@ -53,3 +57,4 @@ ignore_patterns = [
     "dist/**",
     "docs/**"
 ]
+
