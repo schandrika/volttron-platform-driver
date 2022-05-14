@@ -24,7 +24,7 @@ packages = [ { include = "volttron", from = "src" } ]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
-volttron = {url = "https://github.com/VOLTTRON/volttron-core/releases/download/v10.0.1-alpha.9/volttron-10.0.1a9-py3-none-any.whl"}
+# volttron = {path = "../../volttron-core", develop = true}
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"

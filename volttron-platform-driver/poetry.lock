@@ -791,26 +791,28 @@ testing = ["coverage (>=4)", "coverage-enable-subprocess (>=1)", "flaky (>=3)", 
 
 [[package]]
 name = "volttron"
-version = "10.0.1a9"
+version = "0.1.0"
 description = ""
 category = "main"
 optional = false
-python-versions = ">=3.8,<4.0"
+python-versions = "^3.8"
+develop = true
 
 [package.dependencies]
-cryptography = ">=36.0.1,<37.0.0"
-dateutils = ">=0.6.12,<0.7.0"
-gevent = ">=21.12.0,<22.0.0"
-psutil = ">=5.9.0,<6.0.0"
-PyYAML = ">=6.0,<7.0"
-pyzmq = ">=22.3.0,<23.0.0"
-toml = ">=0.10.2,<0.11.0"
-tzlocal = ">=4.1,<5.0"
-watchdog-gevent = ">=0.1.1,<0.2.0"
+cryptography = "^36.0.1"
+dateutils = "^0.6.12"
+gevent = "^21.12.0"
+psutil = "^5.9.0"
+PyYAML = "^6.0"
+pyzmq = "^22.3.0"
+toml = "^0.10.2"
+tzlocal = "^4.1"
+watchdog-gevent = "^0.1.1"
 
 [package.source]
-type = "url"
-url = "https://github.com/VOLTTRON/volttron-core/releases/download/v10.0.1-alpha.9/volttron-10.0.1a9-py3-none-any.whl"
+type = "directory"
+url = "../../volttron-core"
+
 [[package]]
 name = "volttron-driver"
 version = "0.1.0"
@@ -818,10 +820,10 @@ description = "The Driver agent is a custom agent used by the Platform Driver Ag
 category = "main"
 optional = false
 python-versions = ">=3.8,<4.0"
-develop = false
+develop = true
 
 [package.dependencies]
-volttron = {url = "https://github.com/VOLTTRON/volttron-core/releases/download/v10.0.1-alpha.9/volttron-10.0.1a9-py3-none-any.whl"}
+volttron = {path = "../../volttron-core", develop = true}
 
 [package.source]
 type = "directory"
@@ -904,7 +906,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<4.0"
-content-hash = "1768bad0a713cc50249a939f0cf18c8ae46ae79100ecdeffd8816f26fb3cdec9"
+content-hash = "e2f603d1cc02a61aab23e4526a9795effe9f95ef21af93d1327bb9c9e84b7aaa"
 
 [metadata.files]
 alabaster = [
