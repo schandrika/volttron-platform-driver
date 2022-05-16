@@ -814,19 +814,6 @@ type = "directory"
 url = "../../volttron-core"
 
 [[package]]
-name = "volttron-driver"
-version = "0.1.0"
-description = "The Driver agent is a custom agent used by the Platform Driver Agent."
-category = "dev"
-optional = false
-python-versions = ">=3.8,<4.0"
-develop = true
-
-[package.source]
-type = "directory"
-url = "../volttron-driver"
-
-[[package]]
 name = "watchdog"
 version = "2.1.8"
 description = "Filesystem events monitoring"
@@ -1543,7 +1530,6 @@ virtualenv = [
     {file = "virtualenv-20.14.1.tar.gz", hash = "sha256:ef589a79795589aada0c1c5b319486797c03b67ac3984c48c669c0e4f50df3a5"},
 ]
 volttron = []
-volttron-driver = []
 watchdog = [
     {file = "watchdog-2.1.8-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:676263bee67b165f16b05abc52acc7a94feac5b5ab2449b491f1a97638a79277"},
     {file = "watchdog-2.1.8-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:aa68d2d9a89d686fae99d28a6edf3b18595e78f5adf4f5c18fbfda549ac0f20c"},

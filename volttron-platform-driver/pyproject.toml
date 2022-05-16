@@ -24,10 +24,10 @@ packages = [ { include = "platform_driver", from = "src" } ]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
-# volttron-driver = {path = "../volttron-driver", develop = true}
 
 
 [tool.poetry.dev-dependencies]
+volttron-driver = {path = "../volttron-driver", develop = true}
 pytest = "^6.2.5"
 mock = "^4.0.3"
 pre-commit = "^2.17.0"
