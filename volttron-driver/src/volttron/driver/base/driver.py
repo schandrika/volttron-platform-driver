@@ -40,6 +40,8 @@ import datetime
 import logging
 import random
 import traceback
+import importlib
+import inspect
 
 import gevent
 from volttron.client.messaging import headers as headers_mod
@@ -162,14 +164,60 @@ class DriverAgent(BasicAgent):
 
     def get_interface(self, driver_type, config_dict, config_string):
         """Returns an instance of the interface"""
-        module_name = "platform_driver.interfaces." + driver_type
-        module = __import__(module_name, globals(), locals(), [], 0)
-        interfaces = module.interfaces
-        sub_module = getattr(interfaces, driver_type)
-        klass = getattr(sub_module, "Interface")
-        interface = klass(vip=self.vip, core=self.core, device_path=self.device_path)
-        interface.configure(config_dict, config_string)
-        return interface
+        try:     
+            module = self._get_driver_module(driver_type, config_dict)
+            klass_base_interface = self._get_base_interface()
+            klass = self._get_driver_class(module, klass_base_interface)
+
+            if klass is None:
+                _log.exception(f"Driver class not found; No subclass of BaseInterface is found in this module: {module}")
+                return
+            
+            # Instantiate the driver class with the given configurations
+            interface = klass(vip=self.vip, core=self.core, device_path=self.device_path)
+            interface.configure(config_dict, config_string)
+            return interface
+        except:
+            _log.exception("Forgot to pip install volttron-lib-driver.")
+    
+    def _get_driver_module(self, driver_type, config_dict):
+        # Supports both existing 'volttron.driver.interfaces' namespace 
+        # and optional, custom namespace from the driver configuration
+        module_name = f"volttron.driver.interfaces.{driver_type}"
+        _log.debug(config_dict)
+        if config_dict.get("driver_module") is not None:
+            module_name = config_dict.get("driver_module")    
+        
+        _log.debug(f"Driver Module namespace: {module_name}")
+
+        module = importlib.import_module(module_name)
+        _log.debug(f"Driver module: {module}")
+        
+        return module
+    
+    def _get_base_interface(self):
+        try:
+            module_base = importlib.import_module('volttron.driver.base.interfaces')
+        except ModuleNotFoundError as e:
+            _log.debug(f"Volttron-lib-driver was not installed. Cannot find Driver modules: {e}")
+            raise e
+        
+        klass_base_interface = getattr(module_base, 'BaseInterface')
+        
+        _log.debug(f"Base interface: {klass_base_interface}")
+
+        return klass_base_interface
+
+    def _get_driver_class(self, module, klass_base_interface):
+        # gets and returns the first class in 'module' that is a subclass of the Driver Interface
+        klasses = inspect.getmembers(module, inspect.isclass)
+        klass = None
+        for c in klasses:
+            _log.info(f"Checking if the following class is a subclass of the driver interface: {c}")
+            if klass_base_interface in c[1].__bases__:
+                klass = c[1]  
+                break
+        return klass
 
     @Core.receiver('onstart')
     def starting(self, sender, **kwargs):

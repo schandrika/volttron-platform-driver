@@ -409,9 +409,10 @@ class PlatformDriverAgent(Agent):
 
         _log.info("Starting driver: {}".format(topic))
         driver = DriverAgent(self, contents, slot, self.driver_scrape_interval, topic, group,
-                             self.group_offset_interval, self.publish_depth_first_all,
-                             self.publish_breadth_first_all, self.publish_depth_first,
-                             self.publish_breadth_first)
+                            self.group_offset_interval, self.publish_depth_first_all,
+                            self.publish_breadth_first_all, self.publish_depth_first,
+                            self.publish_breadth_first)
+        _log.debug("SPAWNING GREENLET....")
         gevent.spawn(driver.core.run)
         self.instances[topic] = driver
         self.group_counts[group] += 1
