@@ -1,11 +1,7 @@
-# PlatformDriverAgent
+# DriverAgent
 
 [![ci](https://github.com/VOLTTRON/platform-driver-agent/workflows/ci/badge.svg)](https://github.com/VOLTTRON/platform-driver-agent/actions?query=workflow%3Aci)
-[![documentation](https://img.shields.io/badge/docs-mkdocs%20material-blue.svg?style=flat)](https://VOLTTRON.github.io/platform-driver-agent/)
-[![pypi version](https://img.shields.io/pypi/v/platform-driver-agent.svg)](https://pypi.org/project/platform-driver-agent/)
 
-
-The Platform Driver agent is a special purpose agent a user can install on the platform to manage communication of the platform with devices. The Platform driver features a number of endpoints for collecting data and sending control signals using the message bus and automatically publishes data to the bus on a specified interval.
 
 ## Prerequisites
 
@@ -13,7 +9,8 @@ The Platform Driver agent is a special purpose agent a user can install on the p
 * Poetry
 
 ### Python
-PlatformDriverAgent requires Python 3.8 or above.
+
+DriverAgent requires Python 3.8 or above.
 
 
 To install Python 3.8, we recommend using [pyenv](https://github.com/pyenv/pyenv).

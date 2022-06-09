@@ -36,30 +36,37 @@
 # under Contract DE-AC05-76RL01830
 # }}}
 
-import logging
-import sys
-import gevent
-import resource
 import bisect
 import fnmatch
-
-from datetime import datetime, timedelta
+import logging
+import resource
+import sys
 from collections import defaultdict
+from datetime import datetime, timedelta
 
+import gevent
+from volttron.client.known_identities import PLATFORM_DRIVER
 from volttron.client.vip.agent import Agent
 from volttron.client.vip.agent.subsystems.rpc import RPC
+from volttron.utils import (
+    format_timestamp,
+    get_aware_utc_now,
+    load_config,
+    parse_timestamp_string,
+    setup_logging,
+    vip_main,
+)
+from volttron.utils.jsonapi import dumps, loads
+from volttron.utils.math_utils import mean, stdev
 
-from volttron.platform.agent import utils
-from volttron.platform.agent import math_utils
-from volttron.platform.agent.known_identities import PLATFORM_DRIVER
-from volttron.platform import jsonapi
+from volttron.driver.base.driver import DriverAgent
+from volttron.driver.base.driver_locks import (
+    configure_publish_lock,
+    configure_socket_lock,
+)
+from volttron.driver.base.interfaces import DriverInterfaceError
 
-from .driver import DriverAgent
-from .interfaces import DriverInterfaceError
-from .driver_locks import configure_socket_lock, configure_publish_lock
-
-
-utils.setup_logging()
+setup_logging()
 _log = logging.getLogger(__name__)
 __version__ = '4.0'
 
@@ -71,7 +78,7 @@ class OverrideError(DriverInterfaceError):
 
 def platform_driver_agent(config_path, **kwargs):
 
-    config = utils.load_config(config_path)
+    config = load_config(config_path)
 
     def get_config(name, default=None):
         try:
@@ -81,7 +88,7 @@ def platform_driver_agent(config_path, **kwargs):
 
     # Increase open files resource limit to max or 8192 if unlimited
     system_socket_limit = None
-    
+
     try:
         soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
     except OSError:
@@ -94,8 +101,8 @@ def platform_driver_agent(config_path, **kwargs):
             except OSError:
                 _log.exception('error setting open file limits')
             else:
-                _log.debug('open file resource limit increased from %d to %d',
-                           soft, system_socket_limit)
+                _log.debug('open file resource limit increased from %d to %d', soft,
+                           system_socket_limit)
         if soft == hard:
             system_socket_limit = soft
 
@@ -105,7 +112,7 @@ def platform_driver_agent(config_path, **kwargs):
     max_concurrent_publishes = get_config('max_concurrent_publishes', 10000)
 
     driver_config_list = get_config('driver_config_list')
-    
+
     scalability_test = get_config('scalability_test', False)
     scalability_test_iterations = get_config('scalability_test_iterations', 3)
 
@@ -113,7 +120,9 @@ def platform_driver_agent(config_path, **kwargs):
 
     if config.get("driver_config_list") is not None:
         _log.warning("Platform driver configured with old setting. This is no longer supported.")
-        _log.warning('Use the script "scripts/update_platform_driver_config.py" to convert the configuration.')
+        _log.warning(
+            'Use the script "scripts/update_platform_driver_config.py" to convert the configuration.'
+        )
 
     publish_depth_first_all = bool(get_config("publish_depth_first_all", True))
     publish_breadth_first_all = bool(get_config("publish_breadth_first_all", False))
@@ -122,22 +131,27 @@ def platform_driver_agent(config_path, **kwargs):
 
     group_offset_interval = get_config("group_offset_interval", 0.0)
 
-    return PlatformDriverAgent(driver_config_list, scalability_test,
-                             scalability_test_iterations,
-                             driver_scrape_interval,
-                             group_offset_interval,
-                             max_open_sockets,
-                             max_concurrent_publishes,
-                             system_socket_limit,
-                             publish_depth_first_all,
-                             publish_breadth_first_all,
-                             publish_depth_first,
-                             publish_breadth_first,
-                             heartbeat_autostart=True, **kwargs)
+    return PlatformDriverAgent(driver_config_list,
+                               scalability_test,
+                               scalability_test_iterations,
+                               driver_scrape_interval,
+                               group_offset_interval,
+                               max_open_sockets,
+                               max_concurrent_publishes,
+                               system_socket_limit,
+                               publish_depth_first_all,
+                               publish_breadth_first_all,
+                               publish_depth_first,
+                               publish_breadth_first,
+                               heartbeat_autostart=True,
+                               **kwargs)
 
 
 class PlatformDriverAgent(Agent):
-    def __init__(self, driver_config_list, scalability_test = False,
+
+    def __init__(self,
+                 driver_config_list,
+                 scalability_test=False,
                  scalability_test_iterations=3,
                  driver_scrape_interval=0.02,
                  group_offset_interval=0.0,
@@ -184,22 +198,26 @@ class PlatformDriverAgent(Agent):
             self.test_results = []
             self.current_test_start = None
 
-        self.default_config = {"scalability_test": scalability_test,
-                               "scalability_test_iterations": scalability_test_iterations,
-                               "max_open_sockets": max_open_sockets,
-                               "max_concurrent_publishes": max_concurrent_publishes,
-                               "driver_scrape_interval": self.driver_scrape_interval,
-                               "group_offset_interval": self.group_offset_interval,
-                               "publish_depth_first_all": self.publish_depth_first_all,
-                               "publish_breadth_first_all": self.publish_breadth_first_all,
-                               "publish_depth_first": self.publish_depth_first,
-                               "publish_breadth_first": self.publish_breadth_first}
+        self.default_config = {
+            "scalability_test": scalability_test,
+            "scalability_test_iterations": scalability_test_iterations,
+            "max_open_sockets": max_open_sockets,
+            "max_concurrent_publishes": max_concurrent_publishes,
+            "driver_scrape_interval": self.driver_scrape_interval,
+            "group_offset_interval": self.group_offset_interval,
+            "publish_depth_first_all": self.publish_depth_first_all,
+            "publish_breadth_first_all": self.publish_breadth_first_all,
+            "publish_depth_first": self.publish_depth_first,
+            "publish_breadth_first": self.publish_breadth_first
+        }
 
         self.vip.config.set_default("config", self.default_config)
         self.vip.config.subscribe(self.configure_main, actions=["NEW", "UPDATE"], pattern="config")
-        self.vip.config.subscribe(self.update_driver, actions=["NEW", "UPDATE"], pattern="devices/*")
+        self.vip.config.subscribe(self.update_driver,
+                                  actions=["NEW", "UPDATE"],
+                                  pattern="devices/*")
         self.vip.config.subscribe(self.remove_driver, actions="DELETE", pattern="devices/*")
-        
+
     def configure_main(self, config_name, action, contents):
         config = self.default_config.copy()
         config.update(contents)
@@ -210,24 +228,30 @@ class PlatformDriverAgent(Agent):
                 if self.max_open_sockets is not None:
                     max_open_sockets = int(self.max_open_sockets)
                     configure_socket_lock(max_open_sockets)
-                    _log.info("maximum concurrently open sockets limited to " + str(max_open_sockets))
+                    _log.info("maximum concurrently open sockets limited to " +
+                              str(max_open_sockets))
                 elif self.system_socket_limit is not None:
                     max_open_sockets = int(self.system_socket_limit * 0.8)
-                    _log.info("maximum concurrently open sockets limited to " + str(max_open_sockets) +
-                              " (derived from system limits)")
+                    _log.info("maximum concurrently open sockets limited to " +
+                              str(max_open_sockets) + " (derived from system limits)")
                     configure_socket_lock(max_open_sockets)
                 else:
                     configure_socket_lock()
-                    _log.warning("No limit set on the maximum number of concurrently open sockets. "
-                                 "Consider setting max_open_sockets if you plan to work with 800+ modbus devices.")
+                    _log.warning(
+                        "No limit set on the maximum number of concurrently open sockets. "
+                        "Consider setting max_open_sockets if you plan to work with 800+ modbus devices."
+                    )
 
                 self.max_concurrent_publishes = config['max_concurrent_publishes']
                 max_concurrent_publishes = int(self.max_concurrent_publishes)
                 if max_concurrent_publishes < 1:
-                    _log.warning("No limit set on the maximum number of concurrent driver publishes. "
-                                 "Consider setting max_concurrent_publishes if you plan to work with many devices.")
+                    _log.warning(
+                        "No limit set on the maximum number of concurrent driver publishes. "
+                        "Consider setting max_concurrent_publishes if you plan to work with many devices."
+                    )
                 else:
-                    _log.info("maximum concurrent driver publishes limited to " + str(max_concurrent_publishes))
+                    _log.info("maximum concurrent driver publishes limited to " +
+                              str(max_concurrent_publishes))
                 configure_publish_lock(max_concurrent_publishes)
 
                 self.scalability_test = bool(config["scalability_test"])
@@ -240,31 +264,37 @@ class PlatformDriverAgent(Agent):
                     self.current_test_start = None
 
             except ValueError as e:
-                _log.error("ERROR PROCESSING STARTUP CRITICAL CONFIGURATION SETTINGS: {}".format(e))
+                _log.error(
+                    "ERROR PROCESSING STARTUP CRITICAL CONFIGURATION SETTINGS: {}".format(e))
                 _log.error("Platform driver SHUTTING DOWN")
                 sys.exit(1)
 
         else:
             if self.max_open_sockets != config["max_open_sockets"]:
-                _log.info("The platform driver must be restarted for changes to the max_open_sockets setting to take "
-                          "effect")
+                _log.info(
+                    "The platform driver must be restarted for changes to the max_open_sockets setting to take "
+                    "effect")
 
             if self.max_concurrent_publishes != config["max_concurrent_publishes"]:
-                _log.info("The platform driver must be restarted for changes to the max_concurrent_publishes setting to "
-                          "take effect")
+                _log.info(
+                    "The platform driver must be restarted for changes to the max_concurrent_publishes setting to "
+                    "take effect")
 
             if self.scalability_test != bool(config["scalability_test"]):
                 if not self.scalability_test:
                     _log.info(
-                        "The platform driver must be restarted with scalability_test set to true in order to run a test.")
+                        "The platform driver must be restarted with scalability_test set to true in order to run a test."
+                    )
                 if self.scalability_test:
-                    _log.info("A scalability test may not be interrupted. Restarting the driver is required to stop "
-                              "the test.")
+                    _log.info(
+                        "A scalability test may not be interrupted. Restarting the driver is required to stop "
+                        "the test.")
             try:
                 if self.scalability_test_iterations != int(config["scalability_test_iterations"]) and \
                         self.scalability_test:
-                    _log.info("A scalability test must be restarted for the scalability_test_iterations setting to "
-                              "take effect.")
+                    _log.info(
+                        "A scalability test must be restarted for the scalability_test_iterations setting to "
+                        "take effect.")
             except ValueError:
                 pass
 
@@ -272,22 +302,24 @@ class PlatformDriverAgent(Agent):
         if self._override_patterns is None:
             try:
                 values = self.vip.config.get("override_patterns")
-                values = jsonapi.loads(values)
+                values = loads(values)
 
                 if isinstance(values, dict):
                     self._override_patterns = set()
                     for pattern, end_time in values.items():
                         # check the end_time
-                        now = utils.get_aware_utc_now()
+                        now = get_aware_utc_now()
                         # If end time is indefinite, set override with indefinite duration
                         if end_time == "0.0":
                             self._set_override_on(pattern, 0.0, from_config_store=True)
                         else:
-                            end_time = utils.parse_timestamp_string(end_time)
+                            end_time = parse_timestamp_string(end_time)
                             # If end time > current time, set override with new duration
                             if end_time > now:
                                 delta = end_time - now
-                                self._set_override_on(pattern, delta.total_seconds(), from_config_store=True)
+                                self._set_override_on(pattern,
+                                                      delta.total_seconds(),
+                                                      from_config_store=True)
                 else:
                     self._override_patterns = set()
             except KeyError:
@@ -313,20 +345,21 @@ class PlatformDriverAgent(Agent):
             _log.info("Running scalability test. Settings may not be changed without restart.")
             return
 
-        if (self.driver_scrape_interval != driver_scrape_interval or
-                self.group_offset_interval != group_offset_interval):
+        if (self.driver_scrape_interval != driver_scrape_interval
+                or self.group_offset_interval != group_offset_interval):
             self.driver_scrape_interval = driver_scrape_interval
             self.group_offset_interval = group_offset_interval
 
-            _log.info("Setting time delta between driver device scrapes to  " + str(driver_scrape_interval))
+            _log.info("Setting time delta between driver device scrapes to  " +
+                      str(driver_scrape_interval))
 
             # Reset all scrape schedules
             self.freed_time_slots.clear()
             self.group_counts.clear()
             for driver in self.instances.values():
                 time_slot = self.group_counts[driver.group]
-                driver.update_scrape_schedule(time_slot, self.driver_scrape_interval,
-                                              driver.group, self.group_offset_interval)
+                driver.update_scrape_schedule(time_slot, self.driver_scrape_interval, driver.group,
+                                              self.group_offset_interval)
                 self.group_counts[driver.group] += 1
 
         self.publish_depth_first_all = bool(config["publish_depth_first_all"])
@@ -337,8 +370,7 @@ class PlatformDriverAgent(Agent):
         # Update the publish settings on running devices.
         for driver in self.instances.values():
             driver.update_publish_types(self.publish_depth_first_all,
-                                        self.publish_breadth_first_all,
-                                        self.publish_depth_first,
+                                        self.publish_breadth_first_all, self.publish_depth_first,
                                         self.publish_breadth_first)
 
     def derive_device_topic(self, config_name):
@@ -376,12 +408,11 @@ class PlatformDriverAgent(Agent):
             slot = self.freed_time_slots[group].pop(0)
 
         _log.info("Starting driver: {}".format(topic))
-        driver = DriverAgent(self, contents, slot, self.driver_scrape_interval, topic,
-                             group, self.group_offset_interval,
-                             self.publish_depth_first_all,
-                             self.publish_breadth_first_all,
-                             self.publish_depth_first,
+        driver = DriverAgent(self, contents, slot, self.driver_scrape_interval, topic, group,
+                             self.group_offset_interval, self.publish_depth_first_all,
+                             self.publish_breadth_first_all, self.publish_depth_first,
                              self.publish_breadth_first)
+        _log.debug("SPAWNING GREENLET....")
         gevent.spawn(driver.core.run)
         self.instances[topic] = driver
         self.group_counts[group] += 1
@@ -397,46 +428,48 @@ class PlatformDriverAgent(Agent):
     #     _log.debug("Driver hooked up for "+topic)
     #     topic = topic.strip('/')
     #     self.instances[topic] = driver
-        
+
     def scrape_starting(self, topic):
         if not self.scalability_test:
             return
-        
+
         if not self.waiting_to_finish:
             # Start a new measurement
             self.current_test_start = datetime.now()
             self.waiting_to_finish = set(self.instances.keys())
-            
+
         if topic not in self.waiting_to_finish:
             _log.warning(
-                f"{topic} started twice before test finished, increase the length of scrape interval and rerun test")
+                f"{topic} started twice before test finished, increase the length of scrape interval and rerun test"
+            )
 
     def scrape_ending(self, topic):
         if not self.scalability_test:
             return
-        
+
         try:
             self.waiting_to_finish.remove(topic)
         except KeyError:
             _log.warning(
-                f"{topic} published twice before test finished, increase the length of scrape interval and rerun test")
+                f"{topic} published twice before test finished, increase the length of scrape interval and rerun test"
+            )
 
         if not self.waiting_to_finish:
             end = datetime.now()
             delta = end - self.current_test_start
             delta = delta.total_seconds()
             self.test_results.append(delta)
-            
+
             self.test_iterations += 1
-            
+
             _log.info("publish {} took {} seconds".format(self.test_iterations, delta))
-            
+
             if self.test_iterations >= self.scalability_test_iterations:
                 # Test is now over. Button it up and shutdown.
-                mean = math_utils.mean(self.test_results) 
-                stdev = math_utils.stdev(self.test_results) 
-                _log.info("Mean total publish time: "+str(mean))
-                _log.info("Std dev publish time: "+str(stdev))
+                mean_t = mean(self.test_results)
+                stdev_t = stdev(self.test_results)
+                _log.info("Mean total publish time: " + str(mean_t))
+                _log.info("Std dev publish time: " + str(stdev_t))
                 sys.exit(0)
 
     @RPC.export
@@ -498,7 +531,7 @@ class PlatformDriverAgent(Agent):
                 "Cannot set point on device {} since global override is set".format(path))
         else:
             return self.instances[path].set_multiple_points(point_names_values, **kwargs)
-    
+
     @RPC.export
     def heart_beat(self):
         """RPC method
@@ -508,7 +541,7 @@ class PlatformDriverAgent(Agent):
         _log.debug("sending heartbeat")
         for device in self.instances.values():
             device.heart_beat()
-            
+
     @RPC.export
     def revert_point(self, path, point_name, **kwargs):
         """RPC method
@@ -567,7 +600,11 @@ class PlatformDriverAgent(Agent):
         """
         self._set_override_on(pattern, duration, failsafe_revert, staggered_revert)
 
-    def _set_override_on(self, pattern, duration=0.0, failsafe_revert=True, staggered_revert=False,
+    def _set_override_on(self,
+                         pattern,
+                         duration=0.0,
+                         failsafe_revert=True,
+                         staggered_revert=False,
                          from_config_store=False):
         """Turn on override condition on all devices matching the pattern. It schedules an event to keep track of
         the duration over which override has to be applied. New override patterns and corresponding end times are
@@ -584,7 +621,7 @@ class PlatformDriverAgent(Agent):
         :param from_config_store: Flag to indicate if this function is called from config store callback
         :type from_config_store: boolean
         """
-        stagger_interval = 0.05  # sec
+        stagger_interval = 0.05    # sec
         # Add to override patterns set
         self._override_patterns.add(pattern)
         i = 0
@@ -594,7 +631,8 @@ class PlatformDriverAgent(Agent):
                 # If revert to default state is needed
                 if failsafe_revert:
                     if staggered_revert:
-                        self.core.spawn_later(i*stagger_interval, self.instances[name].revert_all())
+                        self.core.spawn_later(i * stagger_interval,
+                                              self.instances[name].revert_all())
                     else:
                         self.core.spawn(self.instances[name].revert_all())
                 # Set override
@@ -609,9 +647,9 @@ class PlatformDriverAgent(Agent):
                     patterns[pat] = str(0.0)
                 else:
                     evt, end_time = self._override_interval_events[pat]
-                    patterns[pat] = utils.format_timestamp(end_time)
+                    patterns[pat] = format_timestamp(end_time)
 
-            self.vip.config.set("override_patterns", jsonapi.dumps(patterns))
+            self.vip.config.set("override_patterns", dumps(patterns))
 
     @RPC.export
     def set_override_off(self, pattern):
@@ -680,9 +718,9 @@ class PlatformDriverAgent(Agent):
                     patterns[pat] = str(0.0)
                 else:
                     evt, end_time = self._override_interval_events[pat]
-                    patterns[pat] = utils.format_timestamp(end_time)
+                    patterns[pat] = format_timestamp(end_time)
 
-            self.vip.config.set("override_patterns", jsonapi.dumps(patterns))
+            self.vip.config.set("override_patterns", dumps(patterns))
         else:
             _log.error("Override Pattern did not match!")
             raise OverrideError(
@@ -698,7 +736,7 @@ class PlatformDriverAgent(Agent):
         :type pattern: str
         :return Flag to indicate if update is done or not.
         """
-        if interval <= 0.0:  # indicative of indefinite duration
+        if interval <= 0.0:    # indicative of indefinite duration
             if pattern in self._override_interval_events:
                 # If override duration is indefinite, do nothing
                 if self._override_interval_events[pattern] is None:
@@ -710,7 +748,7 @@ class PlatformDriverAgent(Agent):
             self._override_interval_events[pattern] = None
             return True
         else:
-            override_start = utils.get_aware_utc_now()
+            override_start = get_aware_utc_now()
             override_end = override_start + timedelta(seconds=interval)
             if pattern in self._override_interval_events:
                 evt = self._override_interval_events[pattern]
@@ -784,8 +822,7 @@ class PlatformDriverAgent(Agent):
 
 def main(argv=sys.argv):
     """Main method called to start the agent."""
-    utils.vip_main(platform_driver_agent, identity=PLATFORM_DRIVER,
-                   version=__version__)
+    vip_main(platform_driver_agent, identity=PLATFORM_DRIVER, version=__version__)
 
 
 if __name__ == '__main__':
