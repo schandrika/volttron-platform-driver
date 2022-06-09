@@ -24,14 +24,9 @@ packages = [ { include = "volttron", from = "src" } ]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
-# Uncomment if you want to use the url link to volttron-core
-# volttron = {url = "https://github.com/VOLTTRON/volttron-core/releases/download/v10.0.1-alpha.10/volttron-10.0.1a10.tar.gz"}
 
 [tool.poetry.dev-dependencies]
-# TODO: remove this once development is done and volttron-core is publicly available
-# this path assumes that volttron-core is two directories up from this module
 volttron = {path = "../../volttron-core", develop = true}
-
 pytest = "^6.2.5"
 mock = "^4.0.3"
 pre-commit = "^2.17.0"

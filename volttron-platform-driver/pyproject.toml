@@ -24,14 +24,9 @@ packages = [ { include = "platform_driver", from = "src" } ]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
-# TODO: Uncomment the line below once volttron-driver is publicly available
-# volttron-driver = 0.1.0
 
 [tool.poetry.dev-dependencies]
-# TODO: remove this dependency once development is done and volttron-driver is publicly available
-# this path assumes that volttron-driver is one directory up from this module
 volttron-driver = {path = "../volttron-driver", develop = true}
-
 pytest = "^6.2.5"
 mock = "^4.0.3"
 pre-commit = "^2.17.0"
@@ -60,4 +55,3 @@ ignore_patterns = [
     "dist/**",
     "docs/**"
 ]
-
