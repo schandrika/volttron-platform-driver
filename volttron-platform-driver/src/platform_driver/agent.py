@@ -48,6 +48,12 @@ import gevent
 from volttron.client.known_identities import PLATFORM_DRIVER
 from volttron.client.vip.agent import Agent
 from volttron.client.vip.agent.subsystems.rpc import RPC
+from volttron.driver.base.driver import DriverAgent
+from volttron.driver.base.driver_locks import (
+    configure_publish_lock,
+    configure_socket_lock,
+)
+from volttron.driver.base.interfaces import DriverInterfaceError
 from volttron.utils import (
     format_timestamp,
     get_aware_utc_now,
@@ -58,13 +64,6 @@ from volttron.utils import (
 )
 from volttron.utils.jsonapi import dumps, loads
 from volttron.utils.math_utils import mean, stdev
-
-from volttron.driver.base.driver import DriverAgent
-from volttron.driver.base.driver_locks import (
-    configure_publish_lock,
-    configure_socket_lock,
-)
-from volttron.driver.base.interfaces import DriverInterfaceError
 
 setup_logging()
 _log = logging.getLogger(__name__)
