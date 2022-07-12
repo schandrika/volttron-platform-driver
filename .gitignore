@@ -13,3 +13,4 @@ site/
 .copier-answers.yml
 pycache
 env
+poetry.lock
