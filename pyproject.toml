@@ -20,14 +20,14 @@ readme = "README.md"
 repository = "https://github.com/VOLTTRON/platform-driver-agent"
 homepage = "https://github.com/VOLTTRON/platform-driver-agent"
 keywords = []
-packages = [ { include = "platform_driver", from = "src" } ]
+packages = [ { include = "volttron", from = "src" } ]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
 
 [tool.poetry.dev-dependencies]
-volttron-lib-driver = {path = "../volttron-driver", develop = true}
-volttron-testing = {path = "../../volttron-testing", develop = true}
+volttron-lib-base-driver = {path = "../volttron-lib-base-driver", develop = true}
+volttron-testing = {path = "../volttron-testing", develop = true}
 pytest = "^6.2.5"
 mock = "^4.0.3"
 pre-commit = "^2.17.0"
@@ -41,7 +41,7 @@ Sphinx = "^4.5.0"
 sphinx-rtd-theme = "^1.0.0"
 
 [tool.poetry.scripts]
-volttron-platform-driver = "platform_driver.agent:main"
+volttron-platform-driver = "volttron.platform_driver.agent:main"
 
 [tool.yapf]
 based_on_style = "pep8"

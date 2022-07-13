@@ -4,9 +4,8 @@ import json
 from pathlib import Path
 
 import pytest
-from testing.volttron import TestServer as _TestServer
-
 from platform_driver.agent import platform_driver_agent
+from testing.volttron import TestServer as _TestServer
 
 TESTS_DIR = Path(__file__).parent
 TMP_DIR = TESTS_DIR / "tmp"
