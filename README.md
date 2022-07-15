@@ -1,6 +1,6 @@
 # Platform Driver Agent
 
-[![ci](https://github.com/VOLTTRON/volttron-platform-driver/workflows/ci/badge.svg)](https://github.com/VOLTTRON/platform-driver-agent/actions?query=workflow%3Aci)
+[![ci](https://github.com/VOLTTRON/volttron-platform-driver/workflows/ci/badge.svg)](https://github.com/VOLTTRON/volttron-platform-driver/actions?query=workflow%3Aci)
 [![documentation](https://img.shields.io/badge/docs-mkdocs%20material-blue.svg?style=flat)](https://VOLTTRON.github.io/volttron-platform-driver/)
 [![pypi version](https://img.shields.io/pypi/v/volttron-platform-driver.svg)](https://pypi.org/project/volttron-platform-driver/)
 
