@@ -4,8 +4,8 @@ import json
 from pathlib import Path
 
 import pytest
-from platform_driver.agent import platform_driver_agent
-from testing.volttron import TestServer as _TestServer
+from volttron.platform_driver.agent import initialize_agent
+from volttrontesting import TestServer
 
 TESTS_DIR = Path(__file__).parent
 TMP_DIR = TESTS_DIR / "tmp"
@@ -26,11 +26,11 @@ def platform_driver():
     with open(config_path, 'w') as fp:
         json.dump(config_json, fp)
 
-    yield platform_driver_agent(config_path)
+    yield initialize_agent(config_path)
 
     Path(config_path).unlink(missing_ok=True)
 
 
 @pytest.fixture()
 def volttron_test_server():
-    yield _TestServer()
+    ts = TestServer()

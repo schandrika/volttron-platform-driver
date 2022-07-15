@@ -75,7 +75,7 @@ class OverrideError(DriverInterfaceError):
     pass
 
 
-def platform_driver_agent(config_path, **kwargs):
+def initialize_agent(config_path, **kwargs):
 
     config = load_config(config_path)
 
