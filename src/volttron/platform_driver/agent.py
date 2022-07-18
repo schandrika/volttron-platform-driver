@@ -821,7 +821,7 @@ class PlatformDriverAgent(Agent):
 
 def main(argv=sys.argv):
     """Main method called to start the agent."""
-    vip_main(platform_driver_agent, identity=PLATFORM_DRIVER, version=__version__)
+    vip_main(initialize_agent, identity=PLATFORM_DRIVER, version=__version__)
 
 
 if __name__ == '__main__':
