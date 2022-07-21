@@ -1,6 +1,6 @@
 # Platform Driver Agent
 
-![Passing?](https://github.com/VOLTTRON/volttron-platform-driver/actions/workflows/run_tests.yml)
+![Passing?](https://github.com/VOLTTRON/volttron-platform-driver/actions/workflows/run_tests.yml/badge.svg)
 [![documentation](https://img.shields.io/badge/docs-mkdocs%20material-blue.svg?style=flat)](https://VOLTTRON.github.io/volttron-platform-driver/)
 [![pypi version](https://img.shields.io/pypi/v/volttron-platform-driver.svg)](https://pypi.org/project/volttron-platform-driver/)
 
