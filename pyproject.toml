@@ -2,6 +2,14 @@
 requires = ["poetry-core>=1.1.0a6"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.mypy]
+python_version = 3.9
+show_error_context = true
+pretty = true
+show_column_numbers = true
+warn_return_any = true
+warn_unused_configs = true
+
 [tool.poetry]
 name = "volttron-platform-driver"
 version = "0.1.0"
@@ -9,17 +17,17 @@ description = "The Platform Driver agent is a special purpose agent that manages
 authors = ["Mark Bonicillo <volttron@pnnl.gov>"]
 license = "Apache License 2.0"
 readme = "README.md"
-repository = "https://github.com/VOLTTRON/platform-driver-agent"
-homepage = "https://github.com/VOLTTRON/platform-driver-agent"
+repository = "https://github.com/eclipse-volttron/platform-driver-agent"
+homepage = "https://github.com/eclipse-volttron/platform-driver-agent"
 keywords = []
 packages = [ { include = "volttron", from = "src" } ]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
-volttron-lib-base-driver = {git = "https://github.com/VOLTTRON/volttron-lib-base-driver.git", branch = "develop"}
+volttron-lib-base-driver = {git = "https://github.com/eclipse-volttron/volttron-lib-base-driver.git", branch = "develop"}
 
 [tool.poetry.group.dev.dependencies]
-volttron-testing = "^0.3.1a3"
+volttron-testing = "^0.3.1a4"
 pytest = "^6.2.5"
 pytest-cov = "^3.0.0"
 mock = "^4.0.3"

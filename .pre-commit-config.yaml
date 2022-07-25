@@ -48,12 +48,3 @@ repos:
   rev: 1.2.0b1
   hooks:
   - id: poetry-check
-
-- repo: local
-  hooks:
-  - id: pytest
-    name: Run tests
-    entry: poetry run pytest
-    pass_filenames: false
-    language: system
-    types: [python]
