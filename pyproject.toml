@@ -3,7 +3,6 @@ requires = ["poetry-core>=1.1.0a6"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]
-python_version = 3.9
 show_error_context = true
 pretty = true
 show_column_numbers = true

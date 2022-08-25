@@ -39,13 +39,12 @@
 import json
 import contextlib
 from datetime import datetime
-import logging
 
 import pytest
 
 from volttrontesting.platformwrapper import PlatformWrapper
-from volttron.platform_driver.agent import PlatformDriverAgent
-from volttron.platform_driver.agent import OverrideError
+from platform_driver.agent import PlatformDriverAgent
+from platform_driver.agent import OverrideError
 from volttrontesting.utils import AgentMock
 from volttron.client.vip.agent import Agent
 

@@ -56,7 +56,6 @@ def test_platform_driver_agent_successful_install_on_volttron_platform(
     }
     pdriver_id = "pdriver_health_id"
 
-    # TODO: tests prompts for github username and password to continue installation. Why does this happen?
     pdriver_uuid = volttron_instance.install_agent(agent_dir=agent_dir,
                                                    config_file=config,
                                                    start=False,
