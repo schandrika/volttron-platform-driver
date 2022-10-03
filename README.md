@@ -1,7 +1,6 @@
 # Platform Driver Agent
 
-![Passing?](https://github.com/VOLTTRON/volttron-platform-driver/actions/workflows/run_tests.yml/badge.svg)
-[![documentation](https://img.shields.io/badge/docs-mkdocs%20material-blue.svg?style=flat)](https://VOLTTRON.github.io/volttron-platform-driver/)
+![Passing?](https://github.com/eclipse-volttron/volttron-platform-driver/actions/workflows/run_tests.yml/badge.svg)
 [![pypi version](https://img.shields.io/pypi/v/volttron-platform-driver.svg)](https://pypi.org/project/volttron-platform-driver/)
 
 
@@ -43,6 +42,10 @@ follow these [instructions](https://python-poetry.org/docs/master/#installation)
 
 ## Installation and Virtual Environment Setup
 
+Set the environment to be in your project directory:
+
+```poetry config virtualenvs.in-project true```
+
 If you want to install all your dependencies, including dependencies to help with developing your agent, run this command:
 
 ```poetry install```
@@ -50,14 +53,6 @@ If you want to install all your dependencies, including dependencies to help wit
 If you want to install only the dependencies needed to run your agent, run this command:
 
 ```poetry install --no-dev```
-
-Set the environment to be in your project directory:
-
-```poetry config virtualenvs.in-project true```
-
-Activate the virtual environment:
-
-```poetry shell```
 
 
 ## Git Setup
@@ -98,7 +93,7 @@ is an example:
 
 # Development
 
-If you want to use a local version of [volttron-core](https://github.com/VOLTTRON/volttron-core) instead of installing it from PyPi, modify the '[tool.poetry.dependencies]' section
+If you want to use a local version of [volttron-core](https://github.com/eclipse-volttron/volttron-core) instead of installing it from PyPi, modify the '[tool.poetry.dependencies]' section
 of pyproject.toml to use a local version. To do this, you can run the following command:
 
 ```
