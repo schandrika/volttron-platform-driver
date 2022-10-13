@@ -1,13 +1,16 @@
 [build-system]
-requires = ["poetry-core>=1.1.0a6"]
+requires = ["poetry-core>=1.2.2"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]
+python_version = 3.8
 show_error_context = true
 pretty = true
 show_column_numbers = true
 warn_return_any = true
 warn_unused_configs = true
+show_error_codes = true
+exclude = ['docs/']
 
 [tool.poetry]
 name = "volttron-platform-driver"
@@ -20,6 +23,14 @@ repository = "https://github.com/eclipse-volttron/platform-driver-agent"
 homepage = "https://github.com/eclipse-volttron/platform-driver-agent"
 keywords = []
 packages = [ { include = "volttron", from = "src" } ]
+classifiers = [
+    "Programming Language :: Python :: 3 :: Only",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Other Audience",
+    "License :: OSI Approved :: Apache Software License"
+]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
@@ -37,6 +48,8 @@ isort = "^5.10.1"
 safety = "^1.10.3"
 mypy = "^0.942"
 coverage = "^6.3.2"
+
+[tool.poetry.group.documentation.dependencies]
 Sphinx = "^4.5.0"
 sphinx-rtd-theme = "^1.0.0"
 
