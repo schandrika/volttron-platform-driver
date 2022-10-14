@@ -1,6 +1,6 @@
 # Platform Driver Agent
 
-![Passing?](https://github.com/eclipse-volttron/volttron-platform-driver/actions/workflows/run_tests.yml/badge.svg)
+![Passing?](https://github.com/eclipse-volttron/volttron-platform-driver/actions/workflows/run-tests.yml/badge.svg)
 [![pypi version](https://img.shields.io/pypi/v/volttron-platform-driver.svg)](https://pypi.org/project/volttron-platform-driver/)
 
 
