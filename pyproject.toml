@@ -37,7 +37,6 @@ python = ">=3.8,<4.0"
 volttron-lib-base-driver = {git = "https://github.com/eclipse-volttron/volttron-lib-base-driver.git", branch = "develop"}
 
 [tool.poetry.group.dev.dependencies]
-volttron-testing = "^0.3.1a4"
 pytest = "^6.2.5"
 pytest-cov = "^3.0.0"
 mock = "^4.0.3"
@@ -48,6 +47,7 @@ isort = "^5.10.1"
 safety = "^1.10.3"
 mypy = "^0.942"
 coverage = "^6.3.2"
+volttron-testing = "^0.3.1a7"
 
 [tool.poetry.group.documentation.dependencies]
 Sphinx = "^4.5.0"
