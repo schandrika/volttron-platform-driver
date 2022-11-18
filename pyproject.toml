@@ -34,7 +34,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
-volttron-lib-base-driver = "^0.1.1a0"
+volttron-lib-base-driver = "^0.1.1a1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^6.2.5"
@@ -47,7 +47,7 @@ isort = "^5.10.1"
 safety = "^1.10.3"
 mypy = "^0.942"
 coverage = "^6.3.2"
-volttron-testing = "^0.3.1a7"
+volttron-testing = "^0.3.1a9"
 
 [tool.poetry.group.documentation.dependencies]
 Sphinx = "^4.5.0"
