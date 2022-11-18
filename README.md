@@ -6,16 +6,14 @@
 
 The Platform Driver agent is a special purpose agent a user can install on the platform to manage communication of the platform with devices. The Platform driver features a number of endpoints for collecting data and sending control signals using the message bus and automatically publishes data to the bus on a specified interval.
 
-## Prerequisites
+# Prerequisites
 
 * Python 3.8
-* Poetry
 
-### Python
-PlatformDriverAgent requires Python 3.8 or above.
+## Python
 
-
-To install Python 3.8, we recommend using [pyenv](https://github.com/pyenv/pyenv).
+<details>
+<summary>To install Python 3.8, we recommend using <a href="https://github.com/pyenv/pyenv"><code>pyenv</code></a>.</summary>
 
 ```bash
 # install pyenv
@@ -32,30 +30,44 @@ pyenv install 3.8.10
 # make it available globally
 pyenv global system 3.8.10
 ```
+</details>
 
-### Poetry
+# Installation
 
-This project uses `poetry` to install and manage dependencies. To install poetry,
-follow these [instructions](https://python-poetry.org/docs/master/#installation).
+Create and activate a virtual environment.
+
+```shell
+python -m venv env
+source env/bin/activate
+```
+
+Installing volttron-platform-driver requires a running volttron instance.
+
+```shell
+pip install volttron
+
+# Start platform with output going to volttron.log
+volttron -vv -l volttron.log &
+```
+
+Install and start the volttron-platform-driver.
+
+```shell
+vctl install volttron-platform-driver --vip-identity platform.driver --start
+```
+
+View the status of the installed agent
+
+```shell
+vctl status
+```
+
+# Development
+
+See [Developing on Modular Volttron](https://github.com/eclipse-volttron/volttron-core/blob/develop/DEVELOPING_ON_MODULAR.md).
 
 
-
-## Installation and Virtual Environment Setup
-
-Set the environment to be in your project directory:
-
-```poetry config virtualenvs.in-project true```
-
-If you want to install all your dependencies, including dependencies to help with developing your agent, run this command:
-
-```poetry install```
-
-If you want to install only the dependencies needed to run your agent, run this command:
-
-```poetry install --no-dev```
-
-
-## Git Setup
+# Git Setup
 
 1. To use git to manage version control, create a new git repository in your local agent project.
 
@@ -68,12 +80,12 @@ your Github or Gitlab account. This will be known as our 'remote'.
 
 3. Add the remote (i.e. the new repo URL from your Github or Gitlab account) to your local repository. Run the following command:
 
-```git remote add origin <my github/gitlab URL>```
+```shellgit remote add origin <my github/gitlab URL>```
 
 When you push to your repo, note that the default branch is called 'main'.
 
 
-## Optional Configurations
+# Optional Configurations
 
 ## Precommit
 
@@ -91,19 +103,6 @@ is an example:
 
 ```git commit -m "Some message" --no-verify```
 
-# Development
-
-If you want to use a local version of [volttron-core](https://github.com/eclipse-volttron/volttron-core) instead of installing it from PyPi, modify the '[tool.poetry.dependencies]' section
-of pyproject.toml to use a local version. To do this, you can run the following command:
-
-```
-# form of the command
-# poetry add <path to my local version of volttron-core> --editable
-
-# example; note that the 'volttron-core' is located one directory up from the current directory
-poetry add ../volttron-core/ --editable
-```
-
 # Documentation
 
 To build the docs, navigate to the 'docs' directory and build the documentation:
@@ -116,10 +115,28 @@ make html
 After the documentation is built, view the documentation in html form in your browser.
 The html files will be located in `~<path to agent project directory>/docs/build/html`.
 
-**PROTIP: To open the landing page of your documentation directly from the command line, run the following command:**
+ℹ️ **PROTIP: To open the landing page of your documentation directly from the command line, run the following command:**
 
 ```shell
 open <path to agent project directory>/docs/build/html/index.html
 ```
 
 This will open the documentation landing page in your default browsert (e.g. Chrome, Firefox).
+
+# Disclaimer Notice
+
+This material was prepared as an account of work sponsored by an agency of the
+United States Government.  Neither the United States Government nor the United
+States Department of Energy, nor Battelle, nor any of their employees, nor any
+jurisdiction or organization that has cooperated in the development of these
+materials, makes any warranty, express or implied, or assumes any legal
+liability or responsibility for the accuracy, completeness, or usefulness or any
+information, apparatus, product, software, or process disclosed, or represents
+that its use would not infringe privately owned rights.
+
+Reference herein to any specific commercial product, process, or service by
+trade name, trademark, manufacturer, or otherwise does not necessarily
+constitute or imply its endorsement, recommendation, or favoring by the United
+States Government or any agency thereof, or Battelle Memorial Institute. The
+views and opinions of authors expressed herein do not necessarily state or
+reflect those of the United States Government or any agency thereof.
