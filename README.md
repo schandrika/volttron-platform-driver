@@ -80,28 +80,10 @@ your Github or Gitlab account. This will be known as our 'remote'.
 
 3. Add the remote (i.e. the new repo URL from your Github or Gitlab account) to your local repository. Run the following command:
 
-```shellgit remote add origin <my github/gitlab URL>```
+```git remote add origin <my github/gitlab URL>```
 
 When you push to your repo, note that the default branch is called 'main'.
 
-
-# Optional Configurations
-
-## Precommit
-
-Install pre-commit hooks:
-
-```pre-commit install```
-
-To run pre-commit on all your files, run this command:
-
-```pre-commit run --all-files```
-
-If you have precommit installed and you want to ignore running the commit hooks
-every time you run a commit, include the `--no-verify` flag in your commit. The following
-is an example:
-
-```git commit -m "Some message" --no-verify```
 
 # Documentation
 
