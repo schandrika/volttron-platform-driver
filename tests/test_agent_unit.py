@@ -42,7 +42,6 @@ from datetime import datetime
 
 import pytest
 
-from volttrontesting.platformwrapper import PlatformWrapper
 from platform_driver.agent import PlatformDriverAgent
 from platform_driver.agent import OverrideError
 from volttrontesting.utils import AgentMock

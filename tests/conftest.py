@@ -40,8 +40,8 @@
 import pytest
 
 import sys
-if "volttron" not in sys.path:
-    sys.path.insert(0, "src/volttron")
+if "src" not in sys.path:
+    sys.path.insert(0, "src")
 
 from volttrontesting.fixtures.volttron_platform_fixtures import volttron_instance
 
