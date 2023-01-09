@@ -31,7 +31,7 @@ classifiers = [
     "Intended Audience :: Other Audience",
     "License :: OSI Approved :: Apache Software License"
 ]
-include = ["IDENTITY"]
+include = ["volttron-platform-driver-0.2.0rc0-default-vip-id"]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
