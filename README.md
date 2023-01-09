@@ -34,38 +34,40 @@ pyenv global system 3.8.10
 
 # Installation
 
-## Create and activate a virtual environment.
+  1. Create and activate a virtual environment.
 
-```shell
-python -m venv env
-source env/bin/activate
-```
+     ```shell
+     python -m venv env
+     source env/bin/activate
+     ```
 
-## Installing volttron-platform-driver requires a running volttron instance.
+  2. Installing volttron-platform-driver requires a running volttron instance.
 
-```shell
-pip install volttron
+     ```shell
+     pip install volttron
+     ```    
+     Start platform with output going to volttron.log
+     ```shell
+     volttron -vv -l volttron.log &
+     ```
 
-# Start platform with output going to volttron.log
-volttron -vv -l volttron.log &
-```
+  3. Install and start the volttron-platform-driver.
 
-## Install and start the volttron-platform-driver.
+     ```shell
+     vctl install volttron-platform-driver --vip-identity platform.driver --start
+     ```
+     #### Note:
+      In the above command, if no --vip-identity is not provided the default value would be "platform.driver". This comes  
+      from the file volttron-platform-driver-<version>-default-vip-id that is at the top level of this agent repository. The 
+      pyproject.toml file in this repository is configured to include this file(volttron-platform-driver-<version>-default-vip-id) 
+      as part of agent wheel. 
 
-```shell
-vctl install volttron-platform-driver --vip-identity platform.driver --start
-```
-#### Note:
-In the above command, if no --vip-identity is not provided the default value would be "platform.driver". This comes  
-from the file volttron-platform-driver-<version>-default-vip-id that is at the top level of this agent repository. The 
-pyproject.toml file in this repository is configured to include this file(volttron-platform-driver-<version>-default-vip-id) 
-as part of agent wheel. 
 
-## View the status of the installed agent
-
-```shell
-vctl status
-```
+  4. View the status of the installed agent
+    
+     ```shell
+     vctl status
+     ```
 
 # Development
 
