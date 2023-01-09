@@ -34,14 +34,14 @@ pyenv global system 3.8.10
 
 # Installation
 
-Create and activate a virtual environment.
+## Create and activate a virtual environment.
 
 ```shell
 python -m venv env
 source env/bin/activate
 ```
 
-Installing volttron-platform-driver requires a running volttron instance.
+## Installing volttron-platform-driver requires a running volttron instance.
 
 ```shell
 pip install volttron
@@ -50,13 +50,18 @@ pip install volttron
 volttron -vv -l volttron.log &
 ```
 
-Install and start the volttron-platform-driver.
+## Install and start the volttron-platform-driver.
 
 ```shell
 vctl install volttron-platform-driver --vip-identity platform.driver --start
 ```
+#### Note:
+In the above command, if no --vip-identity is not provided the default value would be "platform.driver". This comes  
+from the file volttron-platform-driver-<version>-default-vip-id that is at the top level of this agent repository. The 
+pyproject.toml file in this repository is configured to include this file(volttron-platform-driver-<version>-default-vip-id) 
+as part of agent wheel. 
 
-View the status of the installed agent
+## View the status of the installed agent
 
 ```shell
 vctl status
