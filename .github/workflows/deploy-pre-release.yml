@@ -14,6 +14,7 @@ env:
   LC_ALL: en_US.utf-8
   PYTHON_VERSION: '3.8'
   POETRY_VERSION: 1.2.2
+  AGENT_NAME: 'volttron-platform-driver'
 
 jobs:
 
@@ -87,18 +88,28 @@ jobs:
           current_tag=v0.1.0
         fi
 
+        # remove the first character to get rid of the v in front of the version
         current_tag=${current_tag#?}
-
+        
         # current_tag is now the version we want to set our poetry version so
         # that we can bump the version
         poetry version ${current_tag}
         poetry version prerelease --no-interaction
 
-        # Finally because we want to be able to use the variable in later
+        # Because we want to be able to use the variable in later
         # steps we set a NEW_TAG environmental variable
-        NEW_TAG=v$(poetry version --short)
+        new_version=$(poetry version --short)
+        NEW_TAG=v$new_version
         echo "NEW_TAG=$(echo ${NEW_TAG})" >> $GITHUB_ENV
-
+        
+        # update default-vip-id file if one exists
+        if ls -t -1 ${AGENT_NAME}-*-default-vip-id  1> /dev/null 2>&1; then
+          # There should be only one file but in case there is more take the latest 
+          file_to_rename=$(ls -t -1 ${AGENT_NAME}-*-default-vip-id | head -n 1)
+      
+          #  rename to match the bumped version
+          mv $file_to_rename ${AGENT_NAME}-${new_version}-default-vip-id
+        fi
     #---------------------------------------------------------------
     # create build artifacts to be included as part of release
     #---------------------------------------------------------------
