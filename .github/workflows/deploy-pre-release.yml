@@ -102,14 +102,8 @@ jobs:
         NEW_TAG=v$new_version
         echo "NEW_TAG=$(echo ${NEW_TAG})" >> $GITHUB_ENV
         
-        # update default-vip-id file if one exists
-        if ls -t -1 ${AGENT_NAME}-*-default-vip-id  1> /dev/null 2>&1; then
-          # There should be only one file but in case there is more take the latest 
-          file_to_rename=$(ls -t -1 ${AGENT_NAME}-*-default-vip-id | head -n 1)
-      
-          #  rename to match the bumped version
-          mv $file_to_rename ${AGENT_NAME}-${new_version}-default-vip-id
-        fi
+        # generate default-vip-id file if a IDENTITY file exists
+        sh generate_vip_id_file.sh ${AGENT_NAME} ${new_version}
     #---------------------------------------------------------------
     # create build artifacts to be included as part of release
     #---------------------------------------------------------------
