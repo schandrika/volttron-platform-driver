@@ -103,7 +103,7 @@ jobs:
         echo "NEW_TAG=$(echo ${NEW_TAG})" >> $GITHUB_ENV
         
         # generate default-vip-id file if a IDENTITY file exists
-        sh generate_vip_id_file.sh ${AGENT_NAME} ${new_version}
+        sh .github/workflows/generate_vip_id_file.sh ${AGENT_NAME} ${new_version}
     #---------------------------------------------------------------
     # create build artifacts to be included as part of release
     #---------------------------------------------------------------
