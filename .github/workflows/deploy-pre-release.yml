@@ -3,7 +3,7 @@ name: Deploy Pre-Release Artifacts
 on:
   push:
     branches:
-    - develop
+    - test_github_version_bump
 
 defaults:
   run:
@@ -122,7 +122,8 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Publish pre-release to pypi
-      if: github.repository == 'eclipse-volttron/volttron-platform-driver'
+      if: github.repository == 'schandrika/volttron-platform-driver'
       run: |
-        poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
-        poetry publish
+        poetry config repositories.test-pypi https://test.pypi.org/legacy/
+        poetry config pypi-token.test-pypi ${{ secrets.TEST_PYPI_API_TOKEN }}
+        poetry publish -r test-pypi
