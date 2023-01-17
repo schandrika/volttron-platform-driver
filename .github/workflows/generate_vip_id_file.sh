@@ -24,4 +24,5 @@ then
   echo "Usage generate_vip_id_file <agent_name> <version>"
   exit 1
 fi
+echo "Running generate_default_vip_id_file in  $(pwd) "
 generate_default_vip_id_file "$agent_name" "$version"
