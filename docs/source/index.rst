@@ -162,16 +162,17 @@ To view data being published from the fake driver on the message bus, one can
     tail -f volttron.log
 
 .. toctree::
+   :hidden:
 
-   platform-driver/platform-driver
-   actuator/actuator-agent
-   fake-driver/fake-driver
-   bacnet/bacnet-driver
-   chargepoint/chargepoint-driver
-   dnp3-driver/dnp3-driver
-   ecobee/ecobee-web-driver
-   ieee-2030_5/ieee-2030_5-driver
-   modbus/modbus-driver
-   modbus/modbus-tk-driver
-   obix/obix
-   ted-driver/the-energy-detective-driver
+   Platform Driver <platform-driver-agent>
+   Actuator <agent-docs/volttron-actuator/docs/source/index>
+   Fake <agent-docs/volttron-lib-fake-driver/docs/source/index>
+   BACnet <agent-docs/volttron-lib-bacnet-driver/docs/source/index>
+   DNP3 <agent-docs/volttron-lib-dnp3-driver/docs/source/index>
+   Modbus <agent-docs/volttron-lib-modbus-driver/docs/source/index>
+   ModbusTk <agent-docs/volttron-lib-modbustk-driver/docs/source/index>
+#   <agent-docs/volttron-lib-chargepoint-driver/docs/source/index>
+#   <agent-docs/volttron-lib-ecobee-web-driver/docs/source/index>
+#   <agent-docs/volttron-lib-ieee-2030_5-driver/docs/source/index>
+#   <agent-docs/volttron-lib-obix/docs/source/index>
+#   <agent-docs/volttron-lib-the-energy-detective-driver/docs/source/index>

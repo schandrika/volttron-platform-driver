@@ -1,0 +1,39 @@
+#
+# Format
+#
+#<volttron-agent-name>:
+#    # optional path to repo.
+#    # if not provided default would be "https://github.com/eclipse-volttron/" + agent name(parent element)
+#    repo: https://github.com/schandrika/test_agent_docs
+#    # branch or tag that should get pulled. should be valid value to be used wtih git checkout. ex. branch, tag
+#    version: main
+#    # optional docs directory. defaults to "docs/source" under root
+#    docs_dir: docs/source
+
+volttron-actuator:
+    version: docs
+    repo: https://github.com/davidraker/volttron-actuator
+
+volttron-lib-fake-driver:
+    version: docs
+    repo: https://github.com/davidraker/volttron-lib-fake-driver
+
+volttron-lib-bacnet-driver:
+    version: docs
+    repo: https://github.com/davidraker/volttron-lib-bacnet-driver
+
+volttron-bacnet-proxy:
+    version: docs
+    repo: https://github.com/davidraker/volttron-bacnet-proxy
+
+volttron-lib-modbus-driver:
+    version: docs
+    repo: https://github.com/davidraker/volttron-lib-modbus-driver
+
+volttron-lib-modbustk-driver:
+    version: docs
+    repo: https://github.com/davidraker/volttron-lib-modbustk-driver
+
+volttron-lib-dnp3-driver:
+    version: comply-rtd
+    repo: https://github.com/kefeimo/volttron-lib-dnp3-driver
