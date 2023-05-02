@@ -77,7 +77,7 @@ def setup(app):
     app.connect('build-finished', clean_agent_docs_rst)
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
-agent_docs_root = os.path.join(script_dir, "agent-docs")
+agent_docs_root = os.path.join(script_dir, "external-docs")
 
 def _read_config(filename):
     data = {}
@@ -95,7 +95,7 @@ def _read_config(filename):
 
 def generate_agent_docs(app):
     os.makedirs(agent_docs_root)
-    agents_data = _read_config(filename=os.path.join(script_dir, "agent_versions.yml"))
+    agents_data = _read_config(filename=os.path.join(script_dir, "external_docs.yml"))
     repo_prefix = "https://github.com/eclipse-volttron/"
     for agent_name in agents_data:
         agent_repo = agents_data[agent_name].get("repo")

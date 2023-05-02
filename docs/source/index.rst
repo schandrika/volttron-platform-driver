@@ -165,14 +165,14 @@ To view data being published from the fake driver on the message bus, one can
    :hidden:
 
    Platform Driver <platform-driver-agent>
-   Actuator <agent-docs/volttron-actuator/docs/source/index>
-   Fake <agent-docs/volttron-lib-fake-driver/docs/source/index>
-   BACnet <agent-docs/volttron-lib-bacnet-driver/docs/source/index>
-   DNP3 <agent-docs/volttron-lib-dnp3-driver/docs/source/index>
-   Modbus <agent-docs/volttron-lib-modbus-driver/docs/source/index>
-   ModbusTk <agent-docs/volttron-lib-modbustk-driver/docs/source/index>
-#   <agent-docs/volttron-lib-chargepoint-driver/docs/source/index>
-#   <agent-docs/volttron-lib-ecobee-web-driver/docs/source/index>
-#   <agent-docs/volttron-lib-ieee-2030_5-driver/docs/source/index>
-#   <agent-docs/volttron-lib-obix/docs/source/index>
-#   <agent-docs/volttron-lib-the-energy-detective-driver/docs/source/index>
+   Actuator <external-docs/volttron-actuator/docs/source/index>
+   Fake <external-docs/volttron-lib-fake-driver/docs/source/index>
+   BACnet <external-docs/volttron-lib-bacnet-driver/docs/source/index>
+   DNP3 <external-docs/volttron-lib-dnp3-driver/docs/source/index>
+   Modbus <external-docs/volttron-lib-modbus-driver/docs/source/index>
+   ModbusTk <external-docs/volttron-lib-modbustk-driver/docs/source/index>
+#   <external-docs/volttron-lib-chargepoint-driver/docs/source/index>
+#   <external-docs/volttron-lib-ecobee-web-driver/docs/source/index>
+#   <external-docs/volttron-lib-ieee-2030_5-driver/docs/source/index>
+#   <external-docs/volttron-lib-obix/docs/source/index>
+#   <external-docs/volttron-lib-the-energy-detective-driver/docs/source/index>
