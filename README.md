@@ -6,68 +6,34 @@
 
 The Platform Driver agent is a special purpose agent a user can install on the platform to manage communication of the platform with devices. The Platform driver features a number of endpoints for collecting data and sending control signals using the message bus and automatically publishes data to the bus on a specified interval.
 
-# Prerequisites
+# Requires
 
-* Python 3.8
+* python >= 3.10
+* volttron >= 10.0
+* volttron-lib-base-driver
 
-## Python
-
-<details>
-<summary>To install Python 3.8, we recommend using <a href="https://github.com/pyenv/pyenv"><code>pyenv</code></a>.</summary>
-
-```bash
-# install pyenv
-git clone https://github.com/pyenv/pyenv ~/.pyenv
-
-# setup pyenv (you should also put these three lines in .bashrc or similar)
-export PATH="${HOME}/.pyenv/bin:${PATH}"
-export PYENV_ROOT="${HOME}/.pyenv"
-eval "$(pyenv init -)"
-
-# install Python 3.8
-pyenv install 3.8.10
-
-# make it available globally
-pyenv global system 3.8.10
-```
-</details>
+# Documentation
+More detailed documentation can be found on [ReadTheDocs](https://volttron.readthedocs.io/en/modular/). The RST source
+of the documentation for this component is located in the "docs" directory of this repository.
 
 # Installation
 
-  1. Create and activate a virtual environment.
 
-     ```shell
-     python -m venv env
-     source env/bin/activate
-     ```
+Before installing, VOLTTRON should be installed and running.  Its virtual environment should be active.
+Information on how to install of the VOLTTRON platform can be found
+[here](https://github.com/eclipse-volttron/volttron-core).
 
-  2. Installing volttron-platform-driver requires a running volttron instance.
+Install and start the volttron-platform-driver.
 
-     ```shell
-     pip install volttron
-     ```    
-     Start platform with output going to volttron.log
-     ```shell
-     volttron -vv -l volttron.log &
-     ```
+```shell
+vctl install volttron-platform-driver --vip-identity platform.driver --start
+```
 
-  3. Install and start the volttron-platform-driver.
+View the status of the installed agent
 
-     ```shell
-     vctl install volttron-platform-driver --vip-identity platform.driver --start
-     ```
-     #### Note:
-      In the above command, if no --vip-identity is not provided the default value would be "platform.driver". This comes  
-      from the file volttron-platform-driver-<version>-default-vip-id that is at the top level of this agent repository. The 
-      pyproject.toml file in this repository is configured to include this file(volttron-platform-driver-<version>-default-vip-id) 
-      as part of agent wheel. 
-
-
-  4. View the status of the installed agent
-    
-     ```shell
-     vctl status
-     ```
+```shell
+vctl status
+```
 
 # Development
 
