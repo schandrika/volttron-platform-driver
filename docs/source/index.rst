@@ -123,8 +123,3 @@ To view data being published from the fake driver on the message bus, one can
    DNP3 <external-docs/volttron-lib-dnp3-driver/docs/source/index>
    Modbus <external-docs/volttron-lib-modbus-driver/docs/source/index>
    ModbusTk <external-docs/volttron-lib-modbustk-driver/docs/source/index>
-#   <external-docs/volttron-lib-chargepoint-driver/docs/source/index>
-#   <external-docs/volttron-lib-ecobee-web-driver/docs/source/index>
-#   <external-docs/volttron-lib-ieee-2030_5-driver/docs/source/index>
-#   <external-docs/volttron-lib-obix/docs/source/index>
-#   <external-docs/volttron-lib-the-energy-detective-driver/docs/source/index>
