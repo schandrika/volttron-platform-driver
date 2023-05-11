@@ -9,7 +9,7 @@ which are run as a greenlet in the Platform Driver process (typically agents are
 Drivers implement a specific set of features for device communication and ensure uniform behaviors across different
 devices and protocols.
 
-Drivers are managed by the :ref:`Platform Driver Agent <Platform-Driver-Agent>`. The Platform Driver manages the
+Drivers are managed by the :ref:`Platform Driver Agent <Platform-Driver-Agent>`. The Platform Driver
 instantiates individual drivers and facilitates communication with them. Driver instances are created when a new device
 configuration is added to the configuration store. Each driver instance uses an Interface class corresponding to the
 `driver_type` parameter in the device configuration file.  The Interface class is responsible for implementing the
@@ -123,8 +123,3 @@ To view data being published from the fake driver on the message bus, one can
    DNP3 <external-docs/volttron-lib-dnp3-driver/docs/source/index>
    Modbus <external-docs/volttron-lib-modbus-driver/docs/source/index>
    ModbusTk <external-docs/volttron-lib-modbustk-driver/docs/source/index>
-#   <external-docs/volttron-lib-chargepoint-driver/docs/source/index>
-#   <external-docs/volttron-lib-ecobee-web-driver/docs/source/index>
-#   <external-docs/volttron-lib-ieee-2030_5-driver/docs/source/index>
-#   <external-docs/volttron-lib-obix/docs/source/index>
-#   <external-docs/volttron-lib-the-energy-detective-driver/docs/source/index>
