@@ -6,49 +6,22 @@
 
 The Platform Driver agent is a special purpose agent a user can install on the platform to manage communication of the platform with devices. The Platform driver features a number of endpoints for collecting data and sending control signals using the message bus and automatically publishes data to the bus on a specified interval.
 
-# Prerequisites
+# Requires
 
-* Python 3.8
+* python >= 3.10
+* volttron >= 10.0
+* volttron-lib-base-driver
 
-## Python
-
-<details>
-<summary>To install Python 3.8, we recommend using <a href="https://github.com/pyenv/pyenv"><code>pyenv</code></a>.</summary>
-
-```bash
-# install pyenv
-git clone https://github.com/pyenv/pyenv ~/.pyenv
-
-# setup pyenv (you should also put these three lines in .bashrc or similar)
-export PATH="${HOME}/.pyenv/bin:${PATH}"
-export PYENV_ROOT="${HOME}/.pyenv"
-eval "$(pyenv init -)"
-
-# install Python 3.8
-pyenv install 3.8.10
-
-# make it available globally
-pyenv global system 3.8.10
-```
-</details>
+# Documentation
+More detailed documentation can be found on [ReadTheDocs](https://volttron.readthedocs.io/en/modular/). The RST source
+of the documentation for this component is located in the "docs" directory of this repository.
 
 # Installation
 
-Create and activate a virtual environment.
 
-```shell
-python -m venv env
-source env/bin/activate
-```
-
-Installing volttron-platform-driver requires a running volttron instance.
-
-```shell
-pip install volttron
-
-# Start platform with output going to volttron.log
-volttron -vv -l volttron.log &
-```
+Before installing, VOLTTRON should be installed and running.  Its virtual environment should be active.
+Information on how to install of the VOLTTRON platform can be found
+[here](https://github.com/eclipse-volttron/volttron-core).
 
 Install and start the volttron-platform-driver.
 
